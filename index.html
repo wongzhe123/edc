@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#005BAC">
 
   <title>Nota AutoUpCell</title>
@@ -14,37 +15,37 @@
   <div class="brand" id="brandName">AutoUpCell</div>
   <div class="display" id="display">Silakan masukkan jumlah qty nama_barang @harga</div>
 
-<div class="buttons" id="buttons">
-  <button class="nav" id="navUpBtn">Nav up</button>
-  <button class="nav" id="navDownBtn">Nav down</button>
-  <button>Function</button>
-  <button id="calcBtn" onclick="window.location.href='edc.html'">ATM</button>
-  
-  <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button data-key="/">/</button>
-  <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button data-key="*">*</button>
-  <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button data-key="-">-</button>
-  <button data-key=".">.</button><button data-key="0">0</button><button id="abcBtn">abc</button>
-  <button id="changeStoreBtn">+</button>
-  <button id="cancelBtn">cancel</button>
-  <button id="backspaceBtn">←</button>
-  <button class="yasin" id="yasinBtn" onclick="window.location.href='yasin.html'">yasin</button>
-  <button id="enterBtn">enter</button>
-</div>
+  <div class="buttons" id="buttons">
+    <button class="nav" id="navUpBtn">Nav up</button>
+    <button class="nav" id="navDownBtn">Nav down</button>
+    <button>Function</button>
+    <button id="calcBtn" onclick="window.location.href='edc.html'">ATM</button>
+    
+    <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button data-key="/">/</button>
+    <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button data-key="*">*</button>
+    <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button data-key="-">-</button>
+    <button data-key=".">.</button><button data-key="0">0</button><button id="abcBtn">abc</button>
+    <button id="changeStoreBtn">+</button>
+    <button id="cancelBtn">cancel</button>
+    <button id="backspaceBtn">←</button>
+    <button class="yasin" id="yasinBtn" onclick="window.location.href='yasin.html'">yasin</button>
+    <button id="enterBtn">enter</button>
+  </div>
 
-<audio id="klikAudio" src="klik.wav" preload="auto"></audio>
+  <audio id="klikAudio" src="klik.wav" preload="auto"></audio>
 
-<!-- input tersembunyi untuk ketik nama barang -->
-<input id="textInput" type="text" style="position:absolute;opacity:0;z-index:-1;">
+  <!-- input tersembunyi untuk ketik nama barang -->
+  <input id="textInput" type="text" style="position:absolute;opacity:0;z-index:-1;">
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 
-<!-- Register service worker -->
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(reg => console.log('Service Worker registered', reg))
-      .catch(err => console.log('Service Worker failed', err));
-  }
-</script>
+  <!-- Register service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker registered', reg))
+        .catch(err => console.log('Service Worker failed', err));
+    }
+  </script>
 </body>
 </html>
