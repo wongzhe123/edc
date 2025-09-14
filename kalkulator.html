@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoUpCell EDC BCA Style</title>
+ <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+</head>
+<body>
+
+  <div class="brand">AutoUpCell</div>
+  <div class="display" id="display">0</div>
+
+  <div class="buttons">
+    <button class="nav">Nav up</button>
+    <button class="nav">Nav down</button>
+    <button>Function</button>
+  <button id="calcBtn" onclick="window.location.href='edc.html'">ATM</button>
+
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>/</button>
+
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+    <button>*</button>
+
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+    <button>-</button>
+
+    <button>.</button>
+    <button>0</button>
+    <button>ABC</button>
+    <button>+</button>
+
+    <button id="cancelBtn">Cancel</button>
+    <button id="backspaceBtn" class="backspace">←</button>
+    <button class="yasin" onclick="window.location.href='yasin.html'">YASIN</button>
+    <button id="enterBtn">ENTER</button>
+  </div>
+
+  <audio id="klikAudio" src="klik.wav" preload="auto"></audio>
+
+  <script>
+    const display = document.getElementById("display");
+    const edcBtn = document.getElementById("edcBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const backspaceBtn = document.getElementById("backspaceBtn");
+    const enterBtn = document.getElementById("enterBtn");
+    const klikAudio = document.getElementById("klikAudio");
+
+    let buffer = '';
+    let modeEDC = false;
+
+    function warnaDigit(str) {
+      const colors = ['#000000', '#FF0000', '#000000', '#FF0000', '#000000', '#FF0000'];
+      let output = '';
+      let digits = str.replace(/\D/g, '').split('').reverse();
+
+      for (let i = 0; i < digits.length; i++) {
+        const color = colors[Math.floor(i / 3) % colors.length];
+        output = `<span style="color:${color}">${digits[i]}</span>` + output;
+      }
+      return output;
+    }
+
+    function updateDisplay(text) {
+      if (/^\d+$/.test(text)) {
+        display.innerHTML = warnaDigit(text);
+      } else {
+        display.innerHTML = text.replace(/\n/g, "<br>");
+      }
+    }
+
+    function resetDisplay() {
+      buffer = '';
+      if (modeEDC) {
+        updateDisplay("== MODE EDC ==\n1. Tarik Tunai\n2. Cek Saldo\n3. Transfer");
+      } else {
+        updateDisplay('0');
+      }
+    }
+
+    function playClick() {
+      klikAudio.currentTime = 0;
+      klikAudio.play().catch(() => {});
+    }
+
+    document.querySelectorAll(".buttons button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        playClick();
+        const val = btn.textContent;
+
+        
+
+        if (btn === cancelBtn) {
+          resetDisplay();
+          return;
+        }
+
+        if (btn === backspaceBtn) {
+          buffer = buffer.slice(0, -1);
+          updateDisplay(buffer || '0');
+          return;
+        }
+
+        if (btn === enterBtn) {
+          if (modeEDC) {
+            updateDisplay("Fitur belum aktif.\nSilakan pilih menu.");
+          } else {
+            try {
+              const result = eval(buffer).toString();
+              buffer = result;
+              updateDisplay(result);
+            } catch {
+              updateDisplay("Error");
+              buffer = '';
+            }
+          }
+          return;
+        }
+
+        if (["Nav up", "nav down", "Function", "YASIN", "ABC"].includes(val)) {
+          updateDisplay(display.innerText + `\n[Tombol ${val}]`);
+        } else {
+          buffer += val;
+          updateDisplay(buffer);
+        }
+      });
+    });
+
+    resetDisplay();
+  </script>
+
+</body>
+</html>

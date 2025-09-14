@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoUpCell EDC Menu</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+</head>
+<body>
+  <div class="brand">AutoUpCell</div>
+  <div class="display" id="display">0</div>
+
+<!-- Tambahan khusus QR Code -->
+<div id="qrcode-container" style="display:none; text-align:center; margin-top:10px;">
+  <img id="qrcode" src="" alt="QR Code" style="max-width:100%; height:auto;">
+</div>
+  <div class="buttons">
+    <button class="nav">Nav up</button>
+    <button class="nav">Nav down</button>
+    <button>Function</button>
+    <button id="calcBtn" onclick="window.location.href='index.html'">print</button>
+   
+    <button>1</button><button>2</button><button>3</button><button>/</button>
+    <button>4</button><button>5</button><button>6</button><button>*</button>
+    <button>7</button><button>8</button><button>9</button><button>-</button>
+    <button>.</button><button>0</button><button class="abc">abc</button><button>+</button>
+    <button id="cancelBtn">cancel</button>
+    <button id="backspaceBtn">←</button>
+    <button class="yasin" onclick="window.location.href='yasin.html'">yasin</button>
+    <button id="enterBtn">enter</button>
+  </div>
+  <input type="text" id="textInput" style="position:absolute;top:-1000px;" />
+  <audio id="klikAudio" src="klik.wav" preload="auto"></audio>
+  
+  <script src="main.js"></script>
+  
+  <!--
+  <script src="transfer.js"></script>
+  <script src="tarik.js"></script>
+  <script src="pulsa.js"></script>
+  
+  <script src="listrik.js"></script>
+  -->
+
+</body>
+</html>
