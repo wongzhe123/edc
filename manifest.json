@@ -1,9 +1,9 @@
 {
-  "id": "/index.html",
+  "id": "/autoupcell",
   "name": "AutoUpCell",
   "short_name": "AutoUpCell",
   "description": "Kalkulator Nota dan Pencatatan Toko AutoUpCell",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
