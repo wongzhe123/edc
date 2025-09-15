@@ -3,7 +3,7 @@
   "name": "EDC AutoUpCell",
   "short_name": "EDC",
   "start_url": "idex.html",
-  "scope": "/",
+  "scope": "/edc/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#005BAC",
