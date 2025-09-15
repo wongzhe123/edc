@@ -1,16 +1,16 @@
-const CACHE_NAME = 'autoupcell-cache-v28';
+const CACHE_NAME = 'autoupcell-cache-v29';
 const urlsToCache = [
   '/edc/',
   '/edc/index.html',
-  '/style.css',
-  '/app.js',
-  '/klik.wav',
-  '/manifest.json',
-  '/edc.html',
-  '/main.js',
-  '/qrcode.png',
-  '/icone-512.png',
-  'icone-192.png'
+  '/edc/style.css',
+  '/edc/app.js',
+  '/edc/klik.wav',
+  '/edc/manifest.json',
+  '/edc/edc.html',
+  '/edc/main.js',
+  '/edc/qrcode.png',
+  '/edc/images/icone-512.png',
+  '/edc/images/icone-192.png'
   
   
   // tambahkan file lain yang perlu di-cache
