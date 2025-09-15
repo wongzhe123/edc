@@ -1,4 +1,4 @@
-const CACHE_NAME = 'autoupcell-cache-v9';
+const CACHE_NAME = 'autoupcell-cache-v10';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,7 +10,7 @@ const urlsToCache = [
   '/main.js',
   '/qrcode.png',
   '/icone-512.png',
-  'icone-192.png'
+  '/icone-192.png'
   
   
   // tambahkan file lain yang perlu di-cache
