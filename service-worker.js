@@ -1,6 +1,6 @@
-const CACHE_NAME = 'autoupcell-cache-v24';
+const CACHE_NAME = 'autoupcell-cache-v25';
 const urlsToCache = [
-  '/',
+  '/edc/',
   '/index.html',
   '/style.css',
   '/app.js',
