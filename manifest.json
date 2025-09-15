@@ -1,20 +1,21 @@
 {
-  "name": "EDC Autoupcell",
+  "id": "autoupcell-edc",
+  "name": "AutoUpCell EDC",
   "short_name": "EDC",
-  "start_url": "/index.html",
-  "scope": "/",
+  "description": "Kalkulator Nota dan Pencatatan Toko AutoUpCell",
+  "start_url": "/edc/index.html",
+  "scope": "/edc/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
-  "id": "/edc-app", 
+  "theme_color": "#005BAC",
   "icons": [
     {
-      "src": "assets/icone-192.png",
+      "src": "icone-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "assets/icone-512.png",
+      "src": "icone-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
