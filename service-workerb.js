@@ -1,20 +1,21 @@
-const CACHE_NAME = 'edc-cache-v1';
+const CACHE_NAME = 'autoupcell-cache-v20';
 const urlsToCache = [
-  '/edc/',
-  '/edc/index.html',
-  '/edc/style.css',
-  '/edc/app.js',
-  '/edc/klik.wav',
-  '/edc/manifest.json',
-  '/edc/edc.html',
-  '/edc/main.js',
-  '/edc/qrcode.png',
-  '/edc/icon-512.png',
-  '/edc/icon-192.png'
-  // tambahkan file lain di folder edc
+  '/',
+  '/index.html',
+  '/style.css',
+  '/app.js',
+  '/klik.wav',
+  '/manifest.json',
+  '/edc.html',
+  '/main.js',
+  '/qrcode.png',
+  '/icone-512.png',
+  'icone-192.png'
+  
+  
+  // tambahkan file lain yang perlu di-cache
 ];
 
-// Install service worker
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -22,7 +23,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// Fetch resources
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
@@ -30,7 +30,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Activate service worker
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames =>

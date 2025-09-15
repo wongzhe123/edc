@@ -7,7 +7,7 @@
 
   <title>Nota AutoUpCell</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/edc/manifest.json">
 </head>
 <body>
 
@@ -40,12 +40,12 @@
   <script src="app.js"></script>
 
   <!-- Register service worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('Service Worker registered', reg))
-        .catch(err => console.log('/Service Worker failed', err));
-    }
-  </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/edc/service-worker.js')
+      .then(reg => console.log('EDC Service Worker registered', reg))
+      .catch(err => console.log('EDC Service Worker failed', err));
+  }
+</script>
 </body>
 </html>
