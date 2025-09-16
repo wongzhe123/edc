@@ -1,9 +1,8 @@
 {
-  "id": "/edc/autoupcell",
-  "name": "AutoUpCell",
-  "short_name": "AutoUpCell",
-  "description": "Kalkulator Nota dan Pencatatan Toko AutoUpCell",
-  "start_url": "/edc/index.html",
+  "id": "edc_aplikasi",
+  "name": "EDC AutoUpCell",
+  "short_name": "EDC",
+  "start_url": "/edc/",
   "scope": "/edc/",
   "display": "standalone",
   "background_color": "#ffffff",

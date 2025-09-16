@@ -1,42 +1,45 @@
-const CACHE_NAME = 'autoupcell-cache-v29';
+const CACHE_NAME = 'autoupcell-cache-v31';
 const urlsToCache = [
   '/edc/',
   '/edc/index.html',
   '/edc/style.css',
   '/edc/app.js',
-  '/edc/klik.wav',
   '/edc/manifest.json',
   '/edc/edc.html',
   '/edc/main.js',
   '/edc/qrcode.png',
   '/edc/images/icone-512.png',
   '/edc/images/icone-192.png'
-  
-  
-  // tambahkan file lain yang perlu di-cache
+  // klik.wav sengaja tidak dimasukkan biar instalasi ringan
 ];
 
+// Install service worker dan cache file penting
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-    .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
   );
 });
 
+// Fetch: ambil dari cache dulu, kalau tidak ada ambil dari network
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-    .then(response => response || fetch(event.request))
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
 
+// Activate: hapus cache lama kalau ada versi baru
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames =>
-      Promise.all(
-        cacheNames.filter(cn => cn !== CACHE_NAME)
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+        .filter(cn => cn !== CACHE_NAME)
         .map(cn => caches.delete(cn))
-      )
-    )
+      );
+    })
   );
 });
