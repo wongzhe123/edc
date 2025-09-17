@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tes Enter Android</title>
+</head>
+<body>
+  <h2>Deteksi Tombol Enter Android</h2>
+  <p>Ketik di bawah ini lalu tekan tombol <b>Enter/Masuk/Done/Go</b> di keyboard Android.</p>
+  
+  <input id="testInput" type="text" placeholder="Ketik sesuatu..." style="width:100%;padding:8px;font-size:16px;">
+  
+  <div id="log" style="margin-top:20px;font-family:monospace;background:#f0f0f0;padding:10px;"></div>
+  
+  <script>
+    const input = document.getElementById("testInput");
+    const log = document.getElementById("log");
+
+    input.addEventListener("keydown", (e) => {
+      const text = `Key pressed: "${e.key}" (code: ${e.code})`;
+      console.log(text);
+      log.textContent += text + "\n";
+    });
+  </script>
+</body>
+</html>

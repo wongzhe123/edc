@@ -24,9 +24,9 @@ function updateDisplay() {
     let prefix = (idx === activeIndex) ? ">> " : "";
     return prefix + `${it.qty} ${it.nama} @${formatRupiah(it.harga)} ${formatRupiah(it.subtotal)}`;
   });
-  
+
   let total = items.reduce((a, b) => a + b.subtotal, 0);
-  
+
   if (step === "qty" && qty) {
     lines.push(qty);
   } else if (step === "nama") {
@@ -34,25 +34,17 @@ function updateDisplay() {
   } else if (step === "harga") {
     lines.push(qty + " " + nama + " @" + (formatRupiah(harga) || ""));
   }
-  
+
   if (lines.length > 0) {
     lines.push("------------------");
     lines.push("TOTAL Rp : " + formatRupiah(total));
   } else {
     lines.push("Silakan masukkan jumlah qty nama_barang @harga");
   }
-  
+
   display.textContent = lines.join("\n");
   display.scrollTop = display.scrollHeight;
   brandName.textContent = storeName;
-  
-  // === kedip tombol abc ===
-  const abcBtn = document.getElementById("abcBtn");
-  if (step === "qty" && qty) {
-    abcBtn.classList.add("blink");
-  } else {
-    abcBtn.classList.remove("blink");
-  }
 }
 
 // === KASIR KEYBOARD ===
@@ -72,7 +64,7 @@ function setKasirKeyboard(mode) {
   }
 }
 
-// === HANDLE ENTER (BERSIH TANPA GANDA) ===
+// === HANDLE ENTER (UNIVERSAL) ===
 function handleEnter() {
   klikAudio.play();
 
@@ -81,43 +73,41 @@ function handleEnter() {
     setKasirKeyboard("abc");
     textInput.style.opacity = 1;
     textInput.focus();
-
   } else if (step === "nama") {
     nama = textInput.value || "Barang";
     textInput.value = "";
     textInput.style.opacity = 0;
     step = "harga";
     setKasirKeyboard("full");
-    textInput.blur(); // tutup keyboard android
 
+    // Tutup keyboard Android
+    textInput.blur();
   } else if (step === "harga" && harga) {
-    let cleanHarga = harga.replace(/\./g,"");
+    let cleanHarga = harga.replace(/\./g,""); // hilangkan titik ribuan
     let subtotal = parseFloat(qty) * parseFloat(cleanHarga);
     items.push({ qty, nama, harga: cleanHarga, subtotal });
     qty = ""; nama = ""; harga = "";
     step = "qty";
     activeIndex = -1;
-
+    updateDisplay();
   } else if (step === "done") {
     sendToWhatsApp();
-
   } else if (items.length > 0 && step === "qty" && !qty) {
     step = "done";
     sendToWhatsApp();
   }
-
-  updateDisplay(); // cukup sekali
+  updateDisplay();
 }
 
-// === ENTER DI KEYBOARD ANDROID ===
+// === SUPAYA ENTER DI KEYBOARD ANDROID JALAN ===
 textInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    e.preventDefault();
+    e.preventDefault(); // cegah enter bikin newline
     handleEnter();
   }
 });
 
-// === INPUT NAMA BARANG ===
+// === INPUT TEXT UNTUK NAMA BARANG ===
 textInput.addEventListener("input", () => {
   nama = textInput.value;
   updateDisplay();
@@ -127,13 +117,12 @@ textInput.addEventListener("input", () => {
 document.querySelectorAll("[data-key]").forEach(btn => {
   btn.addEventListener("click", () => {
     klikAudio.play();
-    let key = btn.dataset.key;
 
+    let key = btn.dataset.key;
     if (key === "/") {
       sendToRawBT();
       return;
     }
-
     if (step === "qty") {
       qty += key;
     } else if (step === "harga") {
@@ -208,7 +197,7 @@ document.getElementById("changeStoreBtn").addEventListener("click", () => {
   if (!confirmChange) return;
 
   let pass = prompt("Masukkan sandi (hubungi 081211522494 bila tidak punya):");
-  if (pass === null) return; 
+  if (pass === null) return; // user cancel
   if (pass !== "0000") {
     alert("Sandi salah!");
     return;
