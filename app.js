@@ -1,3 +1,4 @@
+// === app.js (FINAL) ===
 // === SETTING AWAL ===
 let storeName = "AutoUpCell"; // default nama toko
 let step = "qty"; // qty -> nama -> harga -> done
@@ -5,7 +6,7 @@ let qty = "";
 let nama = "";
 let harga = "";
 let items = [];
-let activeIndex = -1; 
+let activeIndex = -1;
 const display = document.getElementById("display");
 const buttons = document.getElementById("buttons");
 const textInput = document.getElementById("textInput");
@@ -14,7 +15,7 @@ const klikAudio = document.getElementById("klikAudio");
 
 // === FORMAT RUPIAH ===
 function formatRupiah(angka) {
-  if (!angka) return "0";
+  if (angka === undefined || angka === null) return "0";
   return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
@@ -24,9 +25,9 @@ function updateDisplay() {
     let prefix = (idx === activeIndex) ? ">> " : "";
     return prefix + `${it.qty} ${it.nama} @${formatRupiah(it.harga)} ${formatRupiah(it.subtotal)}`;
   });
-  
+
   let total = items.reduce((a, b) => a + b.subtotal, 0);
-  
+
   if (step === "qty" && qty) {
     lines.push(qty);
   } else if (step === "nama") {
@@ -34,24 +35,23 @@ function updateDisplay() {
   } else if (step === "harga") {
     lines.push(qty + " " + nama + " @" + (formatRupiah(harga) || ""));
   }
-  
+
   if (lines.length > 0) {
     lines.push("------------------");
     lines.push("TOTAL Rp : " + formatRupiah(total));
   } else {
     lines.push("Silakan masukkan jumlah qty nama_barang @harga");
   }
-  
+
   display.textContent = lines.join("\n");
   display.scrollTop = display.scrollHeight;
   brandName.textContent = storeName;
-  
-  // === kedip tombol abc ===
+
+  // kedip tombol abc kalau ada qty
   const abcBtn = document.getElementById("abcBtn");
-  if (step === "qty" && qty) {
-    abcBtn.classList.add("blink");
-  } else {
-    abcBtn.classList.remove("blink");
+  if (abcBtn) {
+    if (step === "qty" && qty) abcBtn.classList.add("blink");
+    else abcBtn.classList.remove("blink");
   }
 }
 
@@ -74,25 +74,31 @@ function setKasirKeyboard(mode) {
 
 // === HANDLE ENTER (BERSIH TANPA GANDA) ===
 function handleEnter() {
-  klikAudio.play();
+  // main sound (jika tersedia)
+  try { klikAudio.play(); } catch(e){/* ignore */ }
 
   if (step === "qty" && qty) {
+    // pindah ke nama barang, tampilkan input teks
     step = "nama";
     setKasirKeyboard("abc");
     textInput.style.opacity = 1;
     textInput.focus();
 
   } else if (step === "nama") {
-    nama = textInput.value || "Barang";
+    // ambil nama barang dari input
+    nama = (textInput.value || "Barang").toString();
     textInput.value = "";
     textInput.style.opacity = 0;
     step = "harga";
     setKasirKeyboard("full");
-    textInput.blur(); // tutup keyboard android
+
+    // tutup keyboard Android agar user dapat memilih keypad EDC
+    textInput.blur();
 
   } else if (step === "harga" && harga) {
-    let cleanHarga = harga.replace(/\./g,"");
-    let subtotal = parseFloat(qty) * parseFloat(cleanHarga);
+    // hitung subtotal lalu kembali ke qty
+    let cleanHarga = String(harga).replace(/\./g,"").replace(/[^0-9]/g,"");
+    let subtotal = (parseFloat(qty) || 0) * (parseFloat(cleanHarga) || 0);
     items.push({ qty, nama, harga: cleanHarga, subtotal });
     qty = ""; nama = ""; harga = "";
     step = "qty";
@@ -106,10 +112,10 @@ function handleEnter() {
     sendToWhatsApp();
   }
 
-  updateDisplay(); // cukup sekali
+  updateDisplay(); // panggil sekali di akhir
 }
 
-// === ENTER DI KEYBOARD ANDROID ===
+// === SUPAYA ENTER DI KEYBOARD ANDROID JALAN ===
 textInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -126,18 +132,20 @@ textInput.addEventListener("input", () => {
 // === TOMBOL ANGKA & SIMBOL ===
 document.querySelectorAll("[data-key]").forEach(btn => {
   btn.addEventListener("click", () => {
-    klikAudio.play();
-    let key = btn.dataset.key;
+    try { klikAudio.play(); } catch(e){/* ignore */ }
 
-    if (key === "/") {
+    let key = btn.dataset.key;
+    if (key === "/") { // tombol khusus: print/RawBT
       sendToRawBT();
       return;
     }
 
+    // nomor hanya untuk qty/harga
     if (step === "qty") {
-      qty += key;
+      // batasi hanya angka dan tanda titik
+      if (/^[0-9.]$/.test(key)) qty += key;
     } else if (step === "harga") {
-      harga += key;
+      if (/^[0-9.]$/.test(key)) harga += key;
     }
     updateDisplay();
   });
@@ -145,7 +153,7 @@ document.querySelectorAll("[data-key]").forEach(btn => {
 
 // === BACKSPACE ===
 document.getElementById("backspaceBtn").addEventListener("click", () => {
-  klikAudio.play();
+  try { klikAudio.play(); } catch(e){/* ignore */ }
 
   if (activeIndex >= 0 && activeIndex < items.length) {
     items.splice(activeIndex, 1);
@@ -165,15 +173,15 @@ document.getElementById("backspaceBtn").addEventListener("click", () => {
 
 // === CANCEL ===
 document.getElementById("cancelBtn").addEventListener("click", () => {
-  klikAudio.play();
+  try { klikAudio.play(); } catch(e){/* ignore */ }
   qty = ""; nama = ""; harga = ""; items = []; activeIndex = -1;
   step = "qty";
   updateDisplay();
 });
 
-// === ABC ===
+// === ABC BUTTON ===
 document.getElementById("abcBtn").addEventListener("click", () => {
-  klikAudio.play();
+  try { klikAudio.play(); } catch(e){/* ignore */ }
   if (step === "qty") {
     step = "nama";
     setKasirKeyboard("abc");
@@ -208,7 +216,7 @@ document.getElementById("changeStoreBtn").addEventListener("click", () => {
   if (!confirmChange) return;
 
   let pass = prompt("Masukkan sandi (hubungi 081211522494 bila tidak punya):");
-  if (pass === null) return; 
+  if (pass === null) return;
   if (pass !== "0000") {
     alert("Sandi salah!");
     return;
@@ -223,4 +231,56 @@ document.getElementById("changeStoreBtn").addEventListener("click", () => {
   }
 });
 
-updateDisplay();
+// === KIRIM KE WHATSAPP ===
+function sendToWhatsApp() {
+  let total = items.reduce((a, b) => a + b.subtotal, 0);
+  let now = new Date();
+  let waktu = now.toLocaleString("id-ID", {
+    weekday: 'long', day: 'numeric', month: 'long',
+    year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+
+  let pesan = `${storeName}\n${waktu}\n\n`;
+  if (items.length === 0) pesan += "(Tidak ada item)\n";
+  items.forEach(it => {
+    pesan += `${it.qty} ${it.nama} @${formatRupiah(it.harga)} = ${formatRupiah(it.subtotal)}\n`;
+  });
+  pesan += `\nTOTAL: Rp ${formatRupiah(total)}\n\nTerima kasih telah berbelanja!`;
+
+  let url = "https://wa.me/?text=" + encodeURIComponent(pesan);
+
+  // langsung pindah tab, tidak pakai _blank
+  window.location.href = url;
+
+  // setelah 1,5 detik reset tampilan supaya tidak bengong
+  setTimeout(() => {
+    updateDisplay();
+  }, 1500);
+}
+
+// === PRINT VIA RAWBT ===
+function sendToRawBT() {
+  let total = items.reduce((a, b) => a + b.subtotal, 0);
+  let now = new Date();
+  let waktu = now.toLocaleString("id-ID", {
+    weekday: 'long', day: 'numeric', month: 'long',
+    year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+
+  let struk = `${storeName.toUpperCase()}\n${waktu}\n--------------------\n`;
+  if (items.length === 0) struk += "(Tidak ada item)\n";
+  items.forEach(it => {
+    struk += `${it.qty} ${it.nama} @${formatRupiah(it.harga)} = ${formatRupiah(it.subtotal)}\n`;
+  });
+  struk += `\nTOTAL: Rp ${formatRupiah(total)}\n--------------------\nTerima kasih!\n`;
+
+  let b64 = btoa(unescape(encodeURIComponent(struk)));
+
+  // langsung arahkan ke rawbt, jangan pakai _blank
+  window.location.href = "rawbt:base64," + b64;
+
+  // delay updateDisplay biar UI tetap hidup
+  setTimeout(() => {
+    updateDisplay();
+  }, 1500);
+}
