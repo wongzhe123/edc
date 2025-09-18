@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FF9900">
+  <title>🚧 Menu Belum Tersedia</title>
+  <style>
+  /* tambahkan ke atas style.css atau di dalam <head> */
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+
+  #backspaceBtn {
+    animation: blink 1s infinite;
+  }
+</style>
+  <link rel="stylesheet" href="../style.css" type="text/css" media="all" />
+</head>
+<body>
+  <div class="brand">AutoUpCell</div>
+  <div class="display" id="display">
+🚧 Menu Belum Tersedia
+
+Fitur ini masih dalam tahap pengembangan.Silakan klik tombol ← untuk kembali.
+  </div>
+
+  <div class="buttons">
+    <button class="nav" id="navUpBtn">Nav up</button>
+    <button class="nav" id="navDownBtn">Nav down</button>
+    
+    <!-- tombol func -->
+    <button class="funch" id="funcBtn" onclick="window.location.href='funch.html'">funch</button>
+    
+    <button id="calcBtn" onclick="window.location.href='../index.html'">print</button>
+    
+    <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button>/</button>
+    <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button>*</button>
+    <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button>-</button>
+    <button>.</button><button data-key="0">0</button><button class="abc">abc</button><button>+</button>
+    
+    <button id="cancelBtn">cancel</button>
+    <button id="backspaceBtn">←</button>
+    <button class="yasin" onclick="window.location.href='yasin.html'">yasin</button>
+    <button id="enterBtn">enter</button>
+  </div>
+
+  <audio id="klikAudio" src="../klik.wav" preload="auto"></audio>
+
+  <script>
+    const klikAudio = document.getElementById("klikAudio");
+    function playKlik() {
+      klikAudio.currentTime = 0;
+      klikAudio.play().catch(()=>{});
+    }
+
+    // tombol cancel → kembali ke index.html
+    document.getElementById("cancelBtn").addEventListener("click", () => {
+      playKlik();
+      window.location.href = "../index.html";
+    });
+
+    // tombol backspace → kembali ke funch.html
+    document.getElementById("backspaceBtn").addEventListener("click", () => {
+      playKlik();
+      window.location.href = "funch.html";
+    });
+  </script>
+</body>
+</html>

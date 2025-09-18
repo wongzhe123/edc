@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#005BAC">
+  <title>AutoUpCell EDC Menu</title>
+  <link rel="stylesheet" href="../style.css" type="text/css" media="all" />
+</head>
+<body>
+  <div class="brand">AutoUpCell</div>
+  <div class="display" id="display">0</div>
+
+  <!-- QR Code (optional) -->
+  <div id="qrcode-container" style="display:none; text-align:center; margin-top:10px;">
+    <img id="qrcode" src="" alt="QR Code" style="max-width:100%; height:auto;">
+  </div>
+
+  <div class="buttons">
+    <button class="nav" id="navUpBtn">Nav up</button>
+    <button class="nav" id="navDownBtn">Nav down</button>
+
+    <!-- tombol func tetap ada dan menuju dirinya sendiri -->
+    <button class="funch" id="funcBtn" onclick="window.location.href='funch.html'">funch</button>
+
+    <button id="calcBtn" onclick="window.location.href='../index.html'">print</button>
+   
+    <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button>/</button>
+    <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button>*</button>
+    <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button>-</button>
+    <button>.</button><button data-key="0">0</button><button class="abc">abc</button><button>+</button>
+
+    <button id="cancelBtn">cancel</button>
+    <button id="backspaceBtn">←</button>
+    <button class="yasin" onclick="window.location.href='yasin.html'">yasin</button>
+    <button id="enterBtn">enter</button>
+  </div>
+
+  <input type="text" id="textInput" style="position:absolute;top:-1000px;" />
+  <audio id="klikAudio" src="../klik.wav" preload="auto"></audio>
+  
+<script>
+// === DATA MENU ===  
+const menus = [  
+  { no: 1, label: "Nomor Rekeningku", link: "myrekening.html" },  
+  { no: 2, label: "Kontak Rekening", link: "rekening_pelanggan.html" },  
+  { no: 3, label: "Game Snake", link: "snake.html" },  
+  { no: 4, label: "Playstorku", link: "playstore.html" },  
+  { no: 5, label: "Pembayaran PPOB", link: "ppob.html" },  
+  { no: 6, label: "Riwayat trnsksi", link: "history.html" },  
+  { no: 7, label: "Top Up E-Wallet", link: "ewallet.html" },  
+  { no: 8, label: "Kalkulator", link: "../kalkulator.html" },  
+  { no: 9, label: "Profil Toko", link: "profile.html" },  
+  { no: 10, label: "Pengaturan", link: "settings.html" },  
+];  
+
+let currentIndex = 0;  
+const maxVisible = 7;  
+const display = document.getElementById("display");  
+const klikAudio = document.getElementById("klikAudio");  
+
+// === cek ketersediaan file (HEAD request) ===  
+async function checkMenuAvailability() {  
+  for (let m of menus) {  
+    try {  
+      const res = await fetch(m.link, { method: "HEAD" });  
+      m.available = res.ok;  
+    } catch {  
+      m.available = false;  
+    }  
+  }  
+  renderMenu();  
+}  
+
+// === render menu dengan scroll ===  
+function renderMenu() {  
+  let windowStart = Math.floor(currentIndex / maxVisible) * maxVisible;  
+  let windowEnd = Math.min(windowStart + maxVisible, menus.length);  
+
+  let text = menus.slice(windowStart, windowEnd)  
+    .map((m, i) => {  
+      let absoluteIndex = windowStart + i;  
+      let label = m.label + (!m.available ? " 🚧" : "");  
+      return absoluteIndex === currentIndex  
+        ? `> ${m.no}. ${label}`  
+        : `  ${m.no}. ${label}`;  
+    })  
+    .join("\n");  
+
+  display.textContent = text;  
+}  
+
+function moveUp() {  
+  currentIndex = (currentIndex - 1 + menus.length) % menus.length;  
+  renderMenu();  
+}  
+
+function moveDown() {  
+  currentIndex = (currentIndex + 1) % menus.length;  
+  renderMenu();  
+}  
+
+async function enterMenu() {  
+  if (currentIndex >= 0 && currentIndex < menus.length) {  
+    const m = menus[currentIndex];  
+    if (m.available) {  
+      window.location.href = m.link;  
+    } else {  
+      window.location.href = "coming-soon.html";  
+    }  
+  }  
+}  
+
+function playKlik() {  
+  klikAudio.currentTime = 0;  
+  klikAudio.play().catch(()=>{});  
+}  
+
+// === event tombol ===  
+document.getElementById("navUpBtn").addEventListener("click", () => { playKlik(); moveUp(); });  
+document.getElementById("navDownBtn").addEventListener("click", () => { playKlik(); moveDown(); });  
+document.getElementById("enterBtn").addEventListener("click", () => { playKlik(); enterMenu(); });  
+
+document.getElementById("cancelBtn").addEventListener("click", () => {  
+  playKlik();  
+  window.location.href = "../index.html";  
+});  
+
+// event angka (1,2,3,...) → hanya pindah panah  
+document.querySelectorAll("[data-key]").forEach((btn) => {  
+  btn.addEventListener("click", () => {  
+    playKlik();  
+    let key = btn.getAttribute("data-key");  
+    let num = parseInt(key);  
+    if (!isNaN(num)) {  
+      let idx = menus.findIndex((m) => m.no === num);  
+      if (idx >= 0) {  
+        currentIndex = idx;  
+        renderMenu();  
+      }  
+    }  
+  });  
+});  
+
+// jalankan cek file otomatis  
+checkMenuAvailability();  
+</script>
+</body>
+</html>
