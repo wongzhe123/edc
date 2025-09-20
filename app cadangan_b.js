@@ -258,40 +258,31 @@ function sendToWhatsApp() {
   }, 1500);
 }
 
-// === PRINT VIA RAWBT ===  
-function sendToRawBT() {  
-  let total = items.reduce((a, b) => a + b.subtotal, 0);  
-  let now = new Date();  
-  let waktu = now.toLocaleString("id-ID", {  
-    weekday: 'long', day: 'numeric', month: 'long',  
-    year: 'numeric', hour: '2-digit', minute: '2-digit'  
-  });  
+// === PRINT VIA RAWBT ===
+function sendToRawBT() {
+  let total = items.reduce((a, b) => a + b.subtotal, 0);
+  let now = new Date();
+  let waktu = now.toLocaleString("id-ID", {
+    weekday: 'long', day: 'numeric', month: 'long',
+    year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
 
-  let struk = "";  
-  struk += `${storeName.toUpperCase()}\n`;  
-  struk += `${waktu}\n`;  
-  struk += "====================\n";  
+  let struk = `${storeName.toUpperCase()}\n${waktu}\n--------------------\n`;
+  if (items.length === 0) struk += "(Tidak ada item)\n";
+  items.forEach(it => {
+    struk += `${it.qty} ${it.nama} @${formatRupiah(it.harga)} = ${formatRupiah(it.subtotal)}\n`;
+  });
+  struk += `\nTOTAL: Rp ${formatRupiah(total)}\n--------------------\nTerima kasih!\n`;
 
-  if (items.length === 0) {  
-    struk += "(Tidak ada item)\n";  
-  } else {  
-    items.forEach(it => {  
-      struk += `${it.qty} ${it.nama}\n   @${formatRupiah(it.harga)} = ${formatRupiah(it.subtotal)}\n`;  
-    });  
-  }  
+  let b64 = btoa(unescape(encodeURIComponent(struk)));
 
-  struk += "--------------------\n";  
-  struk += `TOTAL : Rp ${formatRupiah(total)}\n`;  
-  struk += "====================\n";  
-  struk += "Terima kasih!\n";  
-  struk += "✂️ ------------------\n"; // tanda gunting potong kertas  
+  // langsung arahkan ke rawbt, jangan pakai _blank
+  window.location.href = "rawbt:base64," + b64;
 
-  let b64 = btoa(unescape(encodeURIComponent(struk)));  
-  window.location.href = "rawbt:base64," + b64;  
-
-  setTimeout(() => {  
-    updateDisplay();  
-  }, 1500);  
+  // delay updateDisplay biar UI tetap hidup
+  setTimeout(() => {
+    updateDisplay();
+  }, 1500);
 }
 
 
